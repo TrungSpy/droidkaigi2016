@@ -20,6 +20,7 @@ import dagger.Module;
 import dagger.Provides;
 import io.github.droidkaigi.confsched.BuildConfig;
 import io.github.droidkaigi.confsched.activity.ActivityNavigator;
+import io.github.droidkaigi.confsched.api.DroidKaigiClient;
 import io.github.droidkaigi.confsched.api.RequestInterceptor;
 import io.github.droidkaigi.confsched.model.OrmaDatabase;
 import okhttp3.Cache;
@@ -110,4 +111,9 @@ public class AppModule {
         return new ActivityNavigator();
     }
 
+    @Singleton
+    @Provides
+    public DroidKaigiClient provideDroidKaigiClient(OkHttpClient client) {
+        return new DroidKaigiClient(client);
+    }
 }

@@ -26,7 +26,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import rx.Observable;
 
-@Singleton
 public class DroidKaigiClient {
 
     private static final String SESSIONS_API_ROUTES = "/konifar/droidkaigi2016/master/app/src/main/res/raw/";
@@ -35,7 +34,6 @@ public class DroidKaigiClient {
     private final GoogleFormService googleFormService;
     private final GithubService githubService;
 
-    @Inject
     public DroidKaigiClient(OkHttpClient client) {
         Retrofit feedburnerRetrofit = new Retrofit.Builder()
                 .client(client)

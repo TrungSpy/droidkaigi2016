@@ -11,6 +11,7 @@ import com.google.android.gms.analytics.Tracker;
 
 import io.github.droidkaigi.confsched.BuildConfig;
 import io.github.droidkaigi.confsched.activity.ActivityNavigator;
+import io.github.droidkaigi.confsched.api.DroidKaigiClient;
 import io.github.droidkaigi.confsched.di.AppModule;
 import io.github.droidkaigi.confsched.model.OrmaDatabase;
 import okhttp3.Interceptor;
@@ -50,5 +51,10 @@ public class TestAppModule extends AppModule {
     public OrmaDatabase provideOrmaDatabase(Context context) {
         RenamingDelegatingContext rdContext = new RenamingDelegatingContext(context, "test_");
         return super.provideOrmaDatabase(rdContext);
+    }
+
+    @Override
+    public DroidKaigiClient provideDroidKaigiClient(OkHttpClient client) {
+        return super.provideDroidKaigiClient(client);
     }
 }
