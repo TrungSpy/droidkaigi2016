@@ -9,6 +9,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.intent.IntentStubberRegistry;
 import android.test.RenamingDelegatingContext;
 
+import com.github.gfx.android.orma.OrmaDatabaseBuilderBase;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
@@ -29,36 +30,56 @@ public class TestAppModule extends AppModule {
     static final String TEST_SHARED_PREF_NAME = "test_preferences";
 
     private Context context;
+    private RenamingDelegatingContext rdContext;
+
+    private Tracker tracker;
+    private SharedPreferences sharedPreferences;
+    private OrmaDatabase ormaDatabase;
+    private DroidKaigiClient droidKaigiClient;
 
     public TestAppModule(Application app) {
         super(app);
         context = app;
+        rdContext = new RenamingDelegatingContext(context, "test_");
+
+        GoogleAnalytics ga = GoogleAnalytics.getInstance(context);
+        ga.setDryRun(true);
+        tracker = ga.newTracker(BuildConfig.GA_TRACKING_ID);
+        tracker.enableAdvertisingIdCollection(true);
+        tracker.enableExceptionReporting(true);
+
+        sharedPreferences = context.getSharedPreferences(TEST_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        ormaDatabase = super.provideOrmaDatabase(rdContext);
+
+        AssetManager assets = InstrumentationRegistry.getContext().getAssets();
+        droidKaigiClient = new TestDroidKaigiClient(assets);
+    }
+
+    public void reset() {
+        sharedPreferences.edit().clear().apply();
+        rdContext.deleteDatabase(OrmaDatabaseBuilderBase.getDefaultDatabaseName(context));
+    }
+
+    public void shutdown() {
     }
 
     @Override
     public Tracker provideGoogleAnalyticsTracker(Context context) {
-        GoogleAnalytics ga = GoogleAnalytics.getInstance(context);
-        ga.setDryRun(true);
-        Tracker tracker = ga.newTracker(BuildConfig.GA_TRACKING_ID);
-        tracker.enableAdvertisingIdCollection(true);
-        tracker.enableExceptionReporting(true);
         return tracker;
     }
 
     @Override
     public SharedPreferences provideSharedPreferences(Context context) {
-        return context.getSharedPreferences(TEST_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences;
     }
 
     @Override
     public OrmaDatabase provideOrmaDatabase(Context context) {
-        RenamingDelegatingContext rdContext = new RenamingDelegatingContext(context, "test_");
-        return super.provideOrmaDatabase(rdContext);
+        return ormaDatabase;
     }
 
     @Override
     public DroidKaigiClient provideDroidKaigiClient(OkHttpClient client) {
-        AssetManager assets = InstrumentationRegistry.getContext().getAssets();
-        return new TestDroidKaigiClient(assets);
+        return droidKaigiClient;
     }
 }
