@@ -3,7 +3,10 @@ package io.github.droidkaigi.test;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.intent.IntentStubberRegistry;
 import android.test.RenamingDelegatingContext;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -55,6 +58,7 @@ public class TestAppModule extends AppModule {
 
     @Override
     public DroidKaigiClient provideDroidKaigiClient(OkHttpClient client) {
-        return super.provideDroidKaigiClient(client);
+        AssetManager assets = InstrumentationRegistry.getContext().getAssets();
+        return new TestDroidKaigiClient(assets);
     }
 }

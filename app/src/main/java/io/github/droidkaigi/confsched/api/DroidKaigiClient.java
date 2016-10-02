@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.api;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,6 +34,16 @@ public class DroidKaigiClient {
     private final DroidKaigiService service;
     private final GoogleFormService googleFormService;
     private final GithubService githubService;
+
+    /**
+     * for mockito
+     */
+    @VisibleForTesting
+    protected DroidKaigiClient() {
+        this.service = null;
+        this.googleFormService = null;
+        this.githubService = null;
+    }
 
     public DroidKaigiClient(OkHttpClient client) {
         Retrofit feedburnerRetrofit = new Retrofit.Builder()
