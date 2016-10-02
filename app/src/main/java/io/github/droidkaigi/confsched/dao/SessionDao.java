@@ -104,9 +104,9 @@ public class SessionDao {
 
 
     public void updateAllAsync(List<Session> sessions) {
-        orma.transactionAsync(new TransactionTask() {
+        orma.transactionAsync(new Runnable() {
             @Override
-            public void execute() throws Exception {
+            public void run() {
                 updateAllSync(sessions);
             }
         });
