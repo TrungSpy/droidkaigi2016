@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -38,7 +39,8 @@ public class SessionFeedbackActivity extends BaseActivity {
     private Session session;
     private Subscription subscription;
 
-    private static Intent createIntent(@NonNull Context context, @NonNull Session session) {
+    @VisibleForTesting
+    public static Intent createIntent(@NonNull Context context, @NonNull Session session) {
         Intent intent = new Intent(context, SessionFeedbackActivity.class);
         intent.putExtra(Session.class.getSimpleName(), Parcels.wrap(session));
         return intent;
