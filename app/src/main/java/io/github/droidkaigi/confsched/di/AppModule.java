@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.di;
 
+import com.github.gfx.android.orma.AccessThreadConstraint;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
@@ -91,6 +92,7 @@ public class AppModule {
     @Provides
     public OrmaDatabase provideOrmaDatabase(Context context) {
         return OrmaDatabase.builder(context)
+                .writeOnMainThread(AccessThreadConstraint.NONE)
                 .migrationStep(115, new ManualStepMigration.ChangeStep() {
                     @Override
                     public void change(@NonNull ManualStepMigration.Helper helper) {
