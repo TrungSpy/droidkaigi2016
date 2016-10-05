@@ -32,9 +32,9 @@ public class ContributorDao {
     }
 
     public void upserterAll(@NonNull List<Contributor> contributors) {
-        orma.transactionAsync(new TransactionTask() {
+        orma.transactionAsync(new Runnable() {
             @Override
-            public void execute() throws Exception {
+            public void run() {
                 contributorRelation().upserter().executeAll(contributors);
             }
         });
