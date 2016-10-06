@@ -3,6 +3,7 @@ package io.github.droidkaigi.confsched.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -80,7 +81,7 @@ public class SessionsFragment extends BaseFragment implements StackedPageListene
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentSessionsBinding.inflate(inflater, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sessions, container, false);
         setHasOptionsMenu(true);
         initEmptyView();
         compositeSubscription.add(loadData());
