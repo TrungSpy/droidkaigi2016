@@ -15,6 +15,7 @@ import java.util.List;
 
 import io.github.droidkaigi.confsched.R;
 import io.github.droidkaigi.confsched.model.Session;
+import io.github.droidkaigi.test.CustomViewAction;
 import io.github.droidkaigi.test.IsolateEnvRule;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -22,6 +23,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static io.github.droidkaigi.test.CustomViewAction.setProgress;
 
 /**
  * Created by takao on 2016/10/04.
@@ -44,6 +46,14 @@ public class SessionFeedbackActivityTest {
         Intent intent = SessionFeedbackActivity.createIntent(targetContext, session);
         SessionFeedbackActivity activity = activityTestRule.launchActivity(intent);
 
+        onView(withId(R.id.relevant_feedback_bar))
+                .perform(scrollTo(), setProgress(1));
+        onView(withId(R.id.as_expected_feedback_bar))
+                .perform(scrollTo(), setProgress(2));
+        onView(withId(R.id.difficulty_feedback_bar))
+                .perform(scrollTo(), setProgress(3));
+        onView(withId(R.id.knowledgeable_feedback_bar))
+                .perform(scrollTo(), setProgress(4));
         onView(withId(R.id.other_comments_feedback_text))
                 .perform(
                         scrollTo(),
