@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.api;
 
 import android.support.annotation.NonNull;
 
+import com.android.annotations.VisibleForTesting;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -34,6 +35,13 @@ public class DroidKaigiClient {
     private final DroidKaigiService service;
     private final GoogleFormService googleFormService;
     private final GithubService githubService;
+
+    @VisibleForTesting
+    public DroidKaigiClient() {
+        service = null;
+        googleFormService = null;
+        githubService = null;
+    }
 
     @Inject
     public DroidKaigiClient(OkHttpClient client) {
