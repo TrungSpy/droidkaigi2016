@@ -74,7 +74,7 @@ public class TestAppModule extends AppModule {
         return ormaDatabase;
     }
 
-    @Provides
+    @Override
     public DroidKaigiClient provideDroidKaigiClient(OkHttpClient client) {
         return droidKaigiClient;
     }
