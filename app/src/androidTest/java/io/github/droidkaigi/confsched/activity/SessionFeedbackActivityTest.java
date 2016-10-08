@@ -8,13 +8,19 @@ import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 
+import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
+import org.mockito.internal.stubbing.defaultanswers.ForwardsInvocations;
 
 import java.util.List;
 
 import io.github.droidkaigi.confsched.R;
+import io.github.droidkaigi.confsched.api.DroidKaigiClient;
 import io.github.droidkaigi.confsched.model.Session;
+import io.github.droidkaigi.confsched.model.SessionFeedback;
 import io.github.droidkaigi.test.CustomViewAction;
 import io.github.droidkaigi.test.IsolateEnvRule;
 
@@ -22,6 +28,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static io.github.droidkaigi.test.CustomViewAction.setProgress;
 
@@ -36,6 +43,12 @@ public class SessionFeedbackActivityTest {
 
     @Test
     public void check_request_on_click() {
+        DroidKaigiClient droidKaigiClient = Mockito.mock(
+                DroidKaigiClient.class,
+                new ForwardsInvocations(isolateEnvRule.appModule.droidKaigiClient)
+        );
+        isolateEnvRule.appModule.droidKaigiClient = droidKaigiClient;
+
         Session session;
         {   // 偽物の講演情報を取得する
             List<Session> sessions = isolateEnvRule.appModule.droidKaigiClient.getSessions("ja").toBlocking().first();
@@ -60,5 +73,15 @@ public class SessionFeedbackActivityTest {
                         replaceText("Hogehoge Fugafuga"));
         onView(withId(R.id.submit_feedback_button))
                 .perform(scrollTo(), click());
+
+        ArgumentCaptor<SessionFeedback> captor = ArgumentCaptor.forClass(SessionFeedback.class);
+        Mockito.verify(droidKaigiClient)
+                .submitSessionFeedback(captor.capture());
+        SessionFeedback value = captor.getValue();
+        assertThat(value.relevancy, Matchers.is(1));
+        assertThat(value.asExpected, Matchers.is(2));
+        assertThat(value.difficulty, Matchers.is(3));
+        assertThat(value.knowledgeable, Matchers.is(4));
+        assertThat(value.comment, Matchers.is("Hogehoge Fugafuga"));
     }
 }
