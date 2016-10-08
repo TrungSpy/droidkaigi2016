@@ -84,6 +84,7 @@ android {
                     mapsApiKey: System.getenv('ANDROID_MAPS_API_KEY') != null ? System.getenv('ANDROID_MAPS_API_KEY') : android_maps_api_key
             ]
             buildConfigField("String", "GA_TRACKING_ID", "\"${ga_tracking_id_debug}\"")
+            testCoverageEnabled true
         }
         release {
             signingConfig signingConfigs.release
