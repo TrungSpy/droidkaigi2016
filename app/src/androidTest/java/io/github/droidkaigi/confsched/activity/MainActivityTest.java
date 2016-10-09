@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 
 import io.github.droidkaigi.confsched.R;
 import io.github.droidkaigi.confsched.fragment.SessionsFragment;
+import io.github.droidkaigi.test.IsolateEnvRule;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -31,6 +32,9 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
+    @Rule
+    public IsolateEnvRule isolateEnvRule = new IsolateEnvRule();
+
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class, false, false);
 
